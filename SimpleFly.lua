@@ -1,3 +1,20 @@
+function spoof(seso, value)
+    spawn(function ()
+        local gmt = getrawmetatable(game);
+        setreadyonly(gmt, false);
+        local oldindex = gmt.__index;
+        gmt.__index = newcclosure(function (self,b)
+            if b == seso then
+                return value;
+            end
+        return oldindex(self, b);
+    end)
+end)
+end
+
+spoof("WalkSpeed", 16);
+spoof("JumpPower", 50);
+
 getgenv().grifis = game:GetService("UserInputService");
 getgenv().player = game:GetService("Players").LocalPlayer.Character;
 
@@ -10,10 +27,10 @@ function alert(message)
     });
 end
 
-function volo(bool, speed, jump, gravity, mode)
+function volo(bool, state, speed, jump, gravity)
     spawn(function ()
-        player.Humanoid:ChangeState(mode);
         player.Humanoid:SetStateEnabled("GettingUp", bool);
+        player.Humanoid:ChangeState(state)
         player.Humanoid.WalkSpeed = speed;
         player.Humanoid.JumpPower = jump;
         game.Workspace.Gravity = gravity;
@@ -24,10 +41,10 @@ function main()
     grifis.InputBegan:Connect(function(tastino)
         if tastino.KeyCode == Enum.KeyCode.P then
             alert("You feel wings spreading on your back.");
-            volo(false, 100, 0, 0, "Swimming");  
+            volo(false, "Swimming", 100, 0, 0);
         elseif tastino.KeyCode == Enum.KeyCode.L then
             alert("It's time to accomplish your dream.");
-            volo(true, 16, 50, 192, "Walking");
+            volo(true, "Walking", 16, 50, 192);
         end
     end)
 end
