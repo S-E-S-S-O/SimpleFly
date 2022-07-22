@@ -1,3 +1,5 @@
+getgenv().speed_owo = 100; -- Choose your fly speed
+
 
 function spoof(seso, value)
     spawn(function ()
@@ -34,7 +36,6 @@ spoof("JumpPower", 50);
 killkick()
 
 getgenv().grifis = game:GetService("UserInputService");
-getgenv().player = game:GetService("Players").LocalPlayer.Character;
 
 function alert(message)
     game.StarterGui:SetCore("SendNotification", {
@@ -47,6 +48,7 @@ end
 
 function volo(bool, state, speed, jump, gravity)
     spawn(function ()
+        local player = game:GetService("Players").LocalPlayer.Character;
         player.Humanoid:SetStateEnabled("GettingUp", bool);
         player.Humanoid:ChangeState(state)
         player.Humanoid.WalkSpeed = speed;
@@ -59,7 +61,7 @@ function main()
     grifis.InputBegan:Connect(function(tastino)
         if tastino.KeyCode == Enum.KeyCode.P then
             alert("You feel wings spreading on your back.");
-            volo(false, "Swimming", 100, 0, 0);
+            volo(false, "Swimming", speed_owo, 0, 0);
         elseif tastino.KeyCode == Enum.KeyCode.L then
             alert("It's time to accomplish your dream.");
             volo(true, "Walking", 16, 50, 192);
