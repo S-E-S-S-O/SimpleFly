@@ -1,7 +1,8 @@
+
 function spoof(seso, value)
     spawn(function ()
         local gmt = getrawmetatable(game);
-        setreadyonly(gmt, false);
+        setreadonly(gmt, false);
         local oldindex = gmt.__index;
         gmt.__index = newcclosure(function (self,b)
             if b == seso then
@@ -9,11 +10,28 @@ function spoof(seso, value)
             end
         return oldindex(self, b);
     end)
+    setreadonly(gmt, true);
 end)
+end
+
+
+function killkick()
+    local mt = getrawmetatable(game);
+    local old = mt.__namecall;
+    setreadonly(mt, false);
+    mt.__namecall = function (self, ...)
+        local method = getnamecallmethod()
+        if self == game.Players.LocalPlayer and method == "Kick" then
+            return;
+        end
+        return old(self, ...);
+    end;
+    setreadonly(mt, true);
 end
 
 spoof("WalkSpeed", 16);
 spoof("JumpPower", 50);
+killkick()
 
 getgenv().grifis = game:GetService("UserInputService");
 getgenv().player = game:GetService("Players").LocalPlayer.Character;
