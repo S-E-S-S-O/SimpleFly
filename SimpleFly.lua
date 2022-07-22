@@ -1,5 +1,5 @@
 getgenv().speed_owo = 100; -- Choose your fly speed
-
+getgenv().fly = true; -- Set to false to only gain walk speed
 
 function spoof(seso, value)
     spawn(function ()
@@ -49,11 +49,15 @@ end
 function volo(bool, state, speed, jump, gravity)
     spawn(function ()
         local player = game:GetService("Players").LocalPlayer.Character;
-        player.Humanoid:SetStateEnabled("GettingUp", bool);
-        player.Humanoid:ChangeState(state)
+        if fly == true then -- Don't ask why I'm checking if fly equals to true twice
+            player.Humanoid:SetStateEnabled("GettingUp", bool);
+            player.Humanoid:ChangeState(state)
+        end
         player.Humanoid.WalkSpeed = speed;
-        player.Humanoid.JumpPower = jump;
-        game.Workspace.Gravity = gravity;
+        if fly == true then
+            player.Humanoid.JumpPower = jump;
+            game.Workspace.Gravity = gravity;
+        end
     end)
 end
 
